@@ -140,3 +140,4 @@
 /Users/soniyasapkota/CentralAddressSystem/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 /Users/soniyasapkota/CentralAddressSystem/bin/Debug/net8.0/Microsoft.Extensions.Identity.Core.dll
 /Users/soniyasapkota/CentralAddressSystem/bin/Debug/net8.0/Microsoft.Extensions.Identity.Stores.dll
+/Users/soniyasapkota/CentralAddressSystem/obj/Debug/net8.0/CentralAddressSystem.sourcelink.json
