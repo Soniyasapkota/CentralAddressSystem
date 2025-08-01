@@ -4,6 +4,7 @@ using CentralAddressSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CentralAddressSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250726135308_SeedNepalCountry")]
+    partial class SeedNepalCountry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,14 +95,11 @@ namespace CentralAddressSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryID"));
 
                     b.Property<string>("CountryCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -107,6 +107,15 @@ namespace CentralAddressSystem.Migrations
                     b.HasKey("CountryID");
 
                     b.ToTable("Countries", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CountryID = 1,
+                            CountryCode = "NP",
+                            CountryName = "Nepal",
+                            CreatedAt = new DateTime(2025, 7, 26, 13, 37, 56, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("CentralAddressSystem.Models.District", b =>
@@ -176,15 +185,12 @@ namespace CentralAddressSystem.Migrations
                     b.Property<int>("Noofdistricts")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProvinceCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("ProvinceCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProvinceName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProvinceID");
 

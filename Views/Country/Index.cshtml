@@ -1,0 +1,61 @@
+@model IEnumerable<CentralAddressSystem.Models.Country>
+
+@{
+    ViewData["Title"] = "Manage Countries";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Manage Countries</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Country</a>
+</p>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Country ID</th>
+            <th>Country Name</th>
+            <th>Country Code</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var country in Model)
+            {
+                <tr>
+                    <td>@country.CountryID</td>
+                    <td>@country.CountryName</td>
+                    <td>@country.CountryCode</td>
+                    <td>@country.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@country.CountryID" class="btn btn-outline-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@country.CountryID" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No countries found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

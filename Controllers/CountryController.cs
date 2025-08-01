@@ -3,21 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using CentralAddressSystem.Data;
 using CentralAddressSystem.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CentralAddressSystem.Controllers
 {
     [Authorize]
-    public class ProvinceController : Controller
+    public class CountryController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProvinceController(ApplicationDbContext context)
+        public CountryController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Province/Index
+        // GET: Country/Index
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
@@ -26,14 +25,12 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var provinces = await _context.Provinces
-                .Include(p => p.Country)
-                .ToListAsync();
-            return View(provinces);
+            var countries = await _context.Countries.ToListAsync();
+            return View(countries);
         }
 
-        // GET: Province/Create
-        public async Task<IActionResult> Create()
+        // GET: Country/Create
+        public IActionResult Create()
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -41,14 +38,13 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewData["Countries"] = new SelectList(await _context.Countries.ToListAsync(), "CountryID", "CountryName");
             return View();
         }
 
-        // POST: Province/Create
+        // POST: Country/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Province province)
+        public async Task<IActionResult> Create(Country country)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -58,18 +54,17 @@ namespace CentralAddressSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                province.CreatedAt = DateTime.Now;
-                _context.Add(province);
+                country.CreatedAt = DateTime.Now;
+                _context.Add(country);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Province created successfully.";
+                TempData["Message"] = "Country created successfully.";
                 return RedirectToAction("Index");
             }
 
-            ViewData["Countries"] = new SelectList(await _context.Countries.ToListAsync(), "CountryID", "CountryName", province.CountryID);
-            return View(province);
+            return View(country);
         }
 
-        // GET: Province/Edit/5
+        // GET: Country/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
@@ -83,20 +78,19 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            var province = await _context.Provinces.FindAsync(id);
-            if (province == null)
+            var country = await _context.Countries.FindAsync(id);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            ViewData["Countries"] = new SelectList(await _context.Countries.ToListAsync(), "CountryID", "CountryName", province.CountryID);
-            return View(province);
+            return View(country);
         }
 
-        // POST: Province/Edit/5
+        // POST: Country/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Province province)
+        public async Task<IActionResult> Edit(int id, Country country)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -104,7 +98,7 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (id != province.ProvinceID)
+            if (id != country.CountryID)
             {
                 return NotFound();
             }
@@ -113,14 +107,14 @@ namespace CentralAddressSystem.Controllers
             {
                 try
                 {
-                    province.CreatedAt = (await _context.Provinces.AsNoTracking().FirstOrDefaultAsync(p => p.ProvinceID == id))?.CreatedAt ?? DateTime.Now;
-                    _context.Update(province);
+                    country.CreatedAt = (await _context.Countries.AsNoTracking().FirstOrDefaultAsync(c => c.CountryID == id))?.CreatedAt ?? DateTime.Now;
+                    _context.Update(country);
                     await _context.SaveChangesAsync();
-                    TempData["Message"] = "Province updated successfully.";
+                    TempData["Message"] = "Country updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProvinceExists(province.ProvinceID))
+                    if (!CountryExists(country.CountryID))
                     {
                         return NotFound();
                     }
@@ -129,11 +123,10 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewData["Countries"] = new SelectList(await _context.Countries.ToListAsync(), "CountryID", "CountryName", province.CountryID);
-            return View(province);
+            return View(country);
         }
 
-        // GET: Province/Delete/5
+        // GET: Country/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
@@ -147,18 +140,16 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            var province = await _context.Provinces
-                .Include(p => p.Country)
-                .FirstOrDefaultAsync(m => m.ProvinceID == id);
-            if (province == null)
+            var country = await _context.Countries.FindAsync(id);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            return View(province);
+            return View(country);
         }
 
-        // POST: Province/Delete/5
+        // POST: Country/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -169,19 +160,19 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var province = await _context.Provinces.FindAsync(id);
-            if (province != null)
+            var country = await _context.Countries.FindAsync(id);
+            if (country != null)
             {
-                _context.Provinces.Remove(province);
+                _context.Countries.Remove(country);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Province deleted successfully.";
+                TempData["Message"] = "Country deleted successfully.";
             }
             return RedirectToAction("Index");
         }
 
-        private bool ProvinceExists(int id)
+        private bool CountryExists(int id)
         {
-            return _context.Provinces.Any(e => e.ProvinceID == id);
+            return _context.Countries.Any(e => e.CountryID == id);
         }
     }
 }

@@ -47,17 +47,6 @@ namespace CentralAddressSystem.Data
             modelBuilder.Entity<User>()
              .HasIndex(u => u.Email)
                  .IsUnique();
-
-                 // Seed Nepal as the initial country
-            modelBuilder.Entity<Country>().HasData(
-                new Country
-                {
-                    CountryID = Guid.NewGuid(),
-                    CountryName = "Nepal",
-                    CountryCode = "NP",
-                    CreatedAt = DateTime.UtcNow
-                });
-
         }
 
         }

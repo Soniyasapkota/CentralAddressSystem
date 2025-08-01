@@ -1,0 +1,56 @@
+@model CentralAddressSystem.Models.Province
+
+@{
+    ViewData["Title"] = "Edit Province";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Edit Province</h1>
+<h4>Province</h4>
+<hr />
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProvinceID" />
+            <div class="form-group mb-3">
+                <label asp-for="ProvinceCode" class="control-label"></label>
+                <input asp-for="ProvinceCode" class="form-control" />
+                <span asp-validation-for="ProvinceCode" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ProvinceName" class="control-label"></label>
+                <input asp-for="ProvinceName" class="form-control" />
+                <span asp-validation-for="ProvinceName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Noofdistricts" class="control-label"></label>
+                <input asp-for="Noofdistricts" class="form-control" />
+                <span asp-validation-for="Noofdistricts" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="CountryID" class="control-label"></label>
+                <select asp-for="CountryID" class="form-control" asp-items="ViewBag.Countries"></select>
+                <span asp-validation-for="CountryID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
