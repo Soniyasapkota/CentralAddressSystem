@@ -1,4 +1,4 @@
-@model IEnumerable<CentralAddressSystem.Models.Province>
+@model IEnumerable<CentralAddressSystem.Models.User>
 @{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -7,10 +7,6 @@
 <h1>Admin Dashboard</h1>
 <p>Welcome, @ViewData["UserName"] (@ViewData["UserEmail"])</p>
 <p>This is the admin dashboard for managing the Central Address System.</p>
-
-<div class="mb-3">
-    <a asp-controller="Country" asp-action="Index" class="btn btn-primary">Manage Countries</a>
-</div>
 
 @if (TempData["Message"] != null)
 {
@@ -26,11 +22,11 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Province ID</th>
-                    <th>Province Code</th>
-                    <th>Province Name</th>
-                    <th>No. of Districts</th>
-                    <th>Country</th>
+                    <th>User ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
                     <th>Created At</th>
                     <th>Actions</th>
                 </tr>
@@ -38,18 +34,18 @@
             <tbody>
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var province in Model)
+                    @foreach (var user in Model)
                     {
                         <tr>
-                            <td>@province.ProvinceID</td>
-                            <td>@province.ProvinceCode</td>
-                            <td>@province.ProvinceName</td>
-                            <td>@province.Noofdistricts</td>
-                            <td>@province.Country?.CountryName</td>
-                            <td>@province.CreatedAt.ToString("dd MMM yyyy")</td>
+                            <td>@user.Id</td>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.Email</td>
+                            <td>@user.Role</td>
+                            <td>@user.CreatedAt.ToString("dd MMM yyyy")</td>
                             <td>
-                                <a asp-action="Edit" asp-controller="Province" asp-route-id="@province.ProvinceID" class="btn btn-outline-primary btn-sm">Edit</a>
-                                <a asp-action="Delete" asp-controller="Province" asp-route-id="@province.ProvinceID" class="btn btn-outline-danger btn-sm">Delete</a>
+                                <a asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-outline-primary btn-sm">Edit</a>
+                                <a asp-action="Delete" asp-controller="User" asp-route-id="@user.Id" class="btn btn-outline-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     }
@@ -57,12 +53,18 @@
                 else
                 {
                     <tr>
-                        <td colspan="7">No provinces found.</td>
+                        <td colspan="7">No users found.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
+
+<h2>Our Location</h2>
+<div class="card mb-4">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.9537353153167!3d-37.81627927975146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0x5045675218ce7e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sus!4v1634567890123!5m2!1sen!2sus" 
+            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 </div>
 
 @section Scripts {

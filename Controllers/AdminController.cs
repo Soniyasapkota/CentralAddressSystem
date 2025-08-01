@@ -1,12 +1,24 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using CentralAddressSystem.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CentralAddressSystem.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Dashboard()
+        private readonly UserManager<User> _userManager;
+
+        public AdminController(UserManager<User> userManager)
         {
-            // Retrieve role from session for display or authorization
+            _userManager = userManager;
+        }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            // Retrieve role from session for authorization
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "Admin")
             {
@@ -17,7 +29,9 @@ namespace CentralAddressSystem.Controllers
             ViewData["UserName"] = Request.Cookies["UserName"];
             ViewData["UserEmail"] = Request.Cookies["UserEmail"];
 
-            return View();
+            // Fetch all users from the database
+            var users = await _userManager.Users.ToListAsync();
+            return View(users);
         }
     }
 }
