@@ -29,7 +29,7 @@ namespace CentralAddressSystem.Controllers
 
             var districts = await _context.Districts
                 .Include(d => d.Province)
-                .ThenInclude(p => p.Country)
+                .ThenInclude(p => p!.Country)
                 .ToListAsync();
             return View(districts);
         }
@@ -203,7 +203,7 @@ namespace CentralAddressSystem.Controllers
 
             var district = await _context.Districts
                 .Include(d => d.Province)
-                .ThenInclude(p => p.Country)
+                .ThenInclude(p => p!.Country)
                 .FirstOrDefaultAsync(m => m.DistrictID == id);
             if (district == null)
             {

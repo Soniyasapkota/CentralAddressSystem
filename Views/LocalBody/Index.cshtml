@@ -1,0 +1,62 @@
+@model IEnumerable<CentralAddressSystem.Models.LocalBody>
+
+@{
+    ViewData["Title"] = "Manage Local Bodies";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Manage Local Bodies</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Local Body</a>
+</p>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Local Body ID</th>
+            <th>Local Body Name</th>
+            <th>District</th>
+            <th>Province</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var localBody in Model)
+            {
+                <tr>
+                    <td>@localBody.LocalBodyID</td>
+                    <td>@localBody.LocalBodyName</td>
+                    <td>@localBody.District.DistrictName</td>
+                    <td>@localBody.District.Province!.ProvinceName</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@localBody.LocalBodyID" class="btn btn-outline-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@localBody.LocalBodyID" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No local bodies found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

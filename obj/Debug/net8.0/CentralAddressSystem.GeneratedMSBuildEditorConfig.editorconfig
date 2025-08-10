@@ -70,6 +70,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/soniyasapkota/CentralAddressSystem/Views/LocalBody/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTG9jYWxCb2R5L0NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/soniyasapkota/CentralAddressSystem/Views/LocalBody/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTG9jYWxCb2R5L0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/soniyasapkota/CentralAddressSystem/Views/Province/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvdmluY2UvQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

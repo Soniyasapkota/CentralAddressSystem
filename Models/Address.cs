@@ -13,7 +13,7 @@ namespace CentralAddressSystem.Models
         public Province? Province { get; set; }
         public int? DistrictID { get; set; }
         public District? District { get; set; }
-        public int? LocalBodyID { get; set; }
+        public Guid? LocalBodyID { get; set; }
         public LocalBody? LocalBody { get; set; }
         public int? StateID { get; set; }
         public State? State { get; set; }
