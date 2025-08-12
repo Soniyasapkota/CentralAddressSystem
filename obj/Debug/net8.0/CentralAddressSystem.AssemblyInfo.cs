@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CentralAddressSystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c3c4475ef0617e1692cb575763054280849c97cb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cda9face53e1a7e94060178d3f093e54b3b3afad")]
 [assembly: System.Reflection.AssemblyProductAttribute("CentralAddressSystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CentralAddressSystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

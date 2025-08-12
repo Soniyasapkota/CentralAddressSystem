@@ -29,7 +29,7 @@ namespace CentralAddressSystem.Controllers
 
             var localBodies = await _context.LocalBodies
                 .Include(lb => lb.District)
-                .ThenInclude(d => d.Province)
+                .ThenInclude(d => d!.Province)
                 .ToListAsync();
             return View(localBodies);
         }
@@ -121,6 +121,131 @@ namespace CentralAddressSystem.Controllers
             var districtsReload = await _context.Districts.ToListAsync();
             ViewData["Districts"] = new SelectList(districtsReload, "DistrictID", "DistrictName", localBody.DistrictID);
             return View(localBody);
+        }
+
+         // GET: LocalBody/Edit/{id}
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (HttpContext.Session?.GetString("UserRole") != "Admin")
+            {
+                TempData["Error"] = "Access denied. Admins only.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var localBody = await _context.LocalBodies.FindAsync(id);
+            if (localBody == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Districts"] = new SelectList(await _context.Districts.ToListAsync(), "DistrictID", "DistrictName", localBody.DistrictID);
+            return View(localBody);
+        }
+
+        // POST: LocalBody/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, LocalBody localBody)
+        {
+            if (HttpContext.Session?.GetString("UserRole") != "Admin")
+            {
+                TempData["Error"] = "Access denied. Admins only.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id != localBody.LocalBodyID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Verify DistrictID exists
+                    var districtExists = await _context.Districts.AnyAsync(d => d.DistrictID == localBody.DistrictID);
+                    if (!districtExists)
+                    {
+                        TempData["Error"] = "Selected district does not exist.";
+                        var districts = await _context.Districts.ToListAsync();
+                        ViewData["Districts"] = new SelectList(districts, "DistrictID", "DistrictName", localBody.DistrictID);
+                        return View(localBody);
+                    }
+
+                    _context.Update(localBody);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = "LocalBody updated successfully.";
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LocalBodyExists(localBody.LocalBodyID))
+                    {
+                        return NotFound();
+                    }
+                    throw;
+                }
+                return RedirectToAction("Index");
+            }
+
+            ViewData["Districts"] = new SelectList(await _context.Districts.ToListAsync(), "DistrictID", "DistrictName", localBody.DistrictID);
+            return View(localBody);
+        }
+
+        // GET: LocalBody/Delete/{id}
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (HttpContext.Session?.GetString("UserRole") != "Admin")
+            {
+                TempData["Error"] = "Access denied. Admins only.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var localBody = await _context.LocalBodies
+                .Include(lb => lb.District)
+                .ThenInclude(d => d!.Province)
+                .FirstOrDefaultAsync(m => m.LocalBodyID == id);
+            if (localBody == null)
+            {
+                return NotFound();
+            }
+
+            return View(localBody);
+        }
+
+        // POST: LocalBody/Delete/{id}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            if (HttpContext.Session?.GetString("UserRole") != "Admin")
+            {
+                TempData["Error"] = "Access denied. Admins only.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var localBody = await _context.LocalBodies.FindAsync(id);
+            if (localBody != null)
+            {
+                _context.LocalBodies.Remove(localBody);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "LocalBody deleted successfully.";
+            }
+            return RedirectToAction("Index");
+        }
+
+        private bool LocalBodyExists(Guid id)
+        {
+            return _context.LocalBodies.Any(e => e.LocalBodyID == id);
         }
 
     }

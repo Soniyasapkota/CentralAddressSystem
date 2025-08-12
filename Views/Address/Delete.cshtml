@@ -1,0 +1,53 @@
+@model CentralAddressSystem.Models.Address
+
+@{
+    ViewData["Title"] = "Delete Address";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Delete Address</h1>
+<h3>Are you sure you want to delete this address?</h3>
+<hr />
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<div>
+    <h4>Address Details</h4>
+    <dl class="row">
+        <dt class="col-sm-2">Street</dt>
+        <dd class="col-sm-10">@Model.Street</dd>
+        <dt class="col-sm-2">Country</dt>
+        <dd class="col-sm-10">@Model.Country?.CountryName</dd>
+        <dt class="col-sm-2">Province</dt>
+        <dd class="col-sm-10">@Model.Province?.ProvinceName</dd>
+        <dt class="col-sm-2">District</dt>
+        <dd class="col-sm-10">@Model.District?.DistrictName</dd>
+        <dt class="col-sm-2">Local Body</dt>
+        <dd class="col-sm-10">@Model.LocalBody?.LocalBodyName</dd>
+        <dt class="col-sm-2">State</dt>
+        <dd class="col-sm-10">@Model.State?.StateName</dd>
+        <dt class="col-sm-2">Zip Code</dt>
+        <dd class="col-sm-10">@Model.ZipCode?.Code</dd>
+        <dt class="col-sm-2">User</dt>
+        <dd class="col-sm-10">@Model.User?.Email</dd>
+        <dt class="col-sm-2">Created At</dt>
+        <dd class="col-sm-10">@Model.CreatedAt.ToString("dd MMM yyyy")</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AddressID" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

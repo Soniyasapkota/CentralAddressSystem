@@ -27,7 +27,6 @@
             <th>Local Body Name</th>
             <th>District</th>
             <th>Province</th>
-            <th>Created At</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -39,7 +38,7 @@
                 <tr>
                     <td>@localBody.LocalBodyID</td>
                     <td>@localBody.LocalBodyName</td>
-                    <td>@localBody.District.DistrictName</td>
+                    <td>@localBody.District!.DistrictName</td>
                     <td>@localBody.District.Province!.ProvinceName</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@localBody.LocalBodyID" class="btn btn-outline-primary btn-sm">Edit</a>
