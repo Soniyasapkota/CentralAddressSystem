@@ -65,7 +65,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: Country/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -90,7 +90,7 @@ namespace CentralAddressSystem.Controllers
         // POST: Country/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
+        public async Task<IActionResult> Edit(Guid id, Country country)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -127,7 +127,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: Country/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -152,7 +152,7 @@ namespace CentralAddressSystem.Controllers
         // POST: Country/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -170,7 +170,7 @@ namespace CentralAddressSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool CountryExists(int id)
+        private bool CountryExists(Guid id)
         {
             return _context.Countries.Any(e => e.CountryID == id);
         }

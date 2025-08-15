@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralAddressSystem.Data;
@@ -5,8 +6,7 @@ using CentralAddressSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace CentralAddressSystem.Controllers
 {
@@ -40,9 +40,8 @@ namespace CentralAddressSystem.Controllers
                     .Include(a => a.Country)
                     .Include(a => a.Province)
                     .Include(a => a.District)
-                    .Include(a => a.LocalBody)
-                    .Include(a => a.State)
-                    .Include(a => a.ZipCode);
+                    .Include(a => a.LocalBody);
+                   
             }
             else
             {
@@ -52,9 +51,7 @@ namespace CentralAddressSystem.Controllers
                     .Include(a => a.Country)
                     .Include(a => a.Province)
                     .Include(a => a.District)
-                    .Include(a => a.LocalBody)
-                    .Include(a => a.State)
-                    .Include(a => a.ZipCode);
+                    .Include(a => a.LocalBody);
             }
 
             return View(await addresses.ToListAsync());
@@ -77,7 +74,7 @@ namespace CentralAddressSystem.Controllers
         // POST: Address/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Street,CountryID,ProvinceID,DistrictID,LocalBodyID,StateID,ZipID")] Address address)
+        public async Task<IActionResult> Create([Bind("Street,CountryID,ProvinceID,DistrictID,LocalBodyID")] Address address)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdClaim, out int userId))
@@ -96,8 +93,7 @@ namespace CentralAddressSystem.Controllers
             Console.WriteLine($"ProvinceID: {address.ProvinceID}");
             Console.WriteLine($"DistrictID: {address.DistrictID}");
             Console.WriteLine($"LocalBodyID: {address.LocalBodyID}");
-            Console.WriteLine($"StateID: {address.StateID}");
-            Console.WriteLine($"ZipID: {address.ZipID}");
+           
 
             // Revalidate the model
             TryValidateModel(address);
@@ -128,7 +124,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: Address/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -162,7 +158,7 @@ namespace CentralAddressSystem.Controllers
         // POST: Address/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AddressID,UserID,Street,CountryID,ProvinceID,DistrictID,LocalBodyID,StateID,ZipID,CreatedAt,UpdatedAt")] Address address)
+        public async Task<IActionResult> Edit(Guid id, [Bind("AddressID,UserID,Street,CountryID,ProvinceID,DistrictID,LocalBodyID,StateID,ZipID,CreatedAt,UpdatedAt")] Address address)
         {
             if (id != address.AddressID)
             {
@@ -220,7 +216,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: Address/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -233,8 +229,6 @@ namespace CentralAddressSystem.Controllers
                 .Include(a => a.Province)
                 .Include(a => a.District)
                 .Include(a => a.LocalBody)
-                .Include(a => a.State)
-                .Include(a => a.ZipCode)
                 .FirstOrDefaultAsync(m => m.AddressID == id);
 
             if (address == null)
@@ -262,7 +256,7 @@ namespace CentralAddressSystem.Controllers
         // POST: Address/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var address = await _context.Addresses.FindAsync(id);
             if (address == null)
@@ -299,7 +293,7 @@ namespace CentralAddressSystem.Controllers
             }
         }
 
-        private bool AddressExists(int id)
+        private bool AddressExists(Guid id)
         {
             return _context.Addresses.Any(e => e.AddressID == id);
         }
@@ -310,8 +304,7 @@ namespace CentralAddressSystem.Controllers
             ViewData["Provinces"] = new SelectList(await _context.Provinces.ToListAsync() ?? new List<Province>(), "ProvinceID", "ProvinceName", address?.ProvinceID);
             ViewData["Districts"] = new SelectList(await _context.Districts.ToListAsync() ?? new List<District>(), "DistrictID", "DistrictName", address?.DistrictID);
             ViewData["LocalBodies"] = new SelectList(await _context.LocalBodies.ToListAsync() ?? new List<LocalBody>(), "LocalBodyID", "LocalBodyName", address?.LocalBodyID);
-            ViewData["States"] = new SelectList(await _context.States.ToListAsync() ?? new List<State>(), "StateID", "StateName", address?.StateID);
-            ViewData["ZipCodes"] = new SelectList(await _context.ZipCodes.ToListAsync() ?? new List<ZipCode>(), "ZipID", "ZipCodeValue", address?.ZipID);
+          
         }
     }
 }

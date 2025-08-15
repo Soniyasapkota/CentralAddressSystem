@@ -7,7 +7,7 @@ namespace CentralAddressSystem.Models
     public class Province
     {
         [Key]
-        public int ProvinceID { get; set; }
+        public Guid ProvinceID { get; set; }
 
         [Required(ErrorMessage = "Province code is required")]
         [StringLength(50, ErrorMessage = "Province code cannot exceed 50 characters")]
@@ -22,7 +22,7 @@ namespace CentralAddressSystem.Models
         public int Noofdistricts { get; set; }
 
         [Required(ErrorMessage = "Country is required")]
-        public int CountryID { get; set; }
+        public Guid CountryID { get; set; }
 
         [ForeignKey("CountryID")]
         public Country? Country { get; set; }

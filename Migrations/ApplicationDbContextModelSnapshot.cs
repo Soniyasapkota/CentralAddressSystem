@@ -24,44 +24,34 @@ namespace CentralAddressSystem.Migrations
 
             modelBuilder.Entity("CentralAddressSystem.Models.Address", b =>
                 {
-                    b.Property<int>("AddressID")
+                    b.Property<Guid>("AddressID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"));
-
-                    b.Property<int>("CountryID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CountryID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DistrictID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("DistrictID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("LocalBodyID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("LocalBodyID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StateID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ProvinceID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ZipCodeZipID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ZipID")
                         .HasColumnType("int");
 
                     b.HasKey("AddressID");
@@ -74,22 +64,16 @@ namespace CentralAddressSystem.Migrations
 
                     b.HasIndex("ProvinceID");
 
-                    b.HasIndex("StateID");
-
                     b.HasIndex("UserID");
-
-                    b.HasIndex("ZipCodeZipID");
 
                     b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("CentralAddressSystem.Models.Country", b =>
                 {
-                    b.Property<int>("CountryID")
+                    b.Property<Guid>("CountryID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CountryCode")
                         .IsRequired()
@@ -111,11 +95,9 @@ namespace CentralAddressSystem.Migrations
 
             modelBuilder.Entity("CentralAddressSystem.Models.District", b =>
                 {
-                    b.Property<int>("DistrictID")
+                    b.Property<Guid>("DistrictID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -124,8 +106,8 @@ namespace CentralAddressSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProvinceID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProvinceID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("DistrictID");
 
@@ -136,17 +118,12 @@ namespace CentralAddressSystem.Migrations
 
             modelBuilder.Entity("CentralAddressSystem.Models.LocalBody", b =>
                 {
-                    b.Property<int>("LocalBodyID")
+                    b.Property<Guid>("LocalBodyID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocalBodyID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DistrictID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DistrictID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LocalBodyName")
                         .IsRequired()
@@ -161,14 +138,12 @@ namespace CentralAddressSystem.Migrations
 
             modelBuilder.Entity("CentralAddressSystem.Models.Province", b =>
                 {
-                    b.Property<int>("ProvinceID")
+                    b.Property<Guid>("ProvinceID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProvinceID"));
-
-                    b.Property<int>("CountryID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CountryID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -191,31 +166,6 @@ namespace CentralAddressSystem.Migrations
                     b.HasIndex("CountryID");
 
                     b.ToTable("Provinces", (string)null);
-                });
-
-            modelBuilder.Entity("CentralAddressSystem.Models.State", b =>
-                {
-                    b.Property<int>("StateID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateID"));
-
-                    b.Property<int>("CountryID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StateID");
-
-                    b.HasIndex("CountryID");
-
-                    b.ToTable("States", (string)null);
                 });
 
             modelBuilder.Entity("CentralAddressSystem.Models.User", b =>
@@ -306,31 +256,6 @@ namespace CentralAddressSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CentralAddressSystem.Models.ZipCode", b =>
-                {
-                    b.Property<int>("ZipID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ZipID"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StateID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ZipID");
-
-                    b.HasIndex("StateID");
-
-                    b.ToTable("ZipCodes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -486,20 +411,12 @@ namespace CentralAddressSystem.Migrations
                         .WithMany()
                         .HasForeignKey("ProvinceID");
 
-                    b.HasOne("CentralAddressSystem.Models.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateID");
-
                     b.HasOne("CentralAddressSystem.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Addresses_AspNetUsers");
-
-                    b.HasOne("CentralAddressSystem.Models.ZipCode", "ZipCode")
-                        .WithMany()
-                        .HasForeignKey("ZipCodeZipID");
 
                     b.Navigation("Country");
 
@@ -509,11 +426,7 @@ namespace CentralAddressSystem.Migrations
 
                     b.Navigation("Province");
 
-                    b.Navigation("State");
-
                     b.Navigation("User");
-
-                    b.Navigation("ZipCode");
                 });
 
             modelBuilder.Entity("CentralAddressSystem.Models.District", b =>
@@ -547,28 +460,6 @@ namespace CentralAddressSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("CentralAddressSystem.Models.State", b =>
-                {
-                    b.HasOne("CentralAddressSystem.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("CentralAddressSystem.Models.ZipCode", b =>
-                {
-                    b.HasOne("CentralAddressSystem.Models.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

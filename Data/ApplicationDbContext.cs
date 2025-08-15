@@ -17,8 +17,7 @@ namespace CentralAddressSystem.Data
         public DbSet<Province> Provinces { get; set; } = null!;
         public DbSet<District> Districts { get; set; } = null!;
         public DbSet<LocalBody> LocalBodies { get; set; } = null!;
-        public DbSet<State> States { get; set; } = null!;
-        public DbSet<ZipCode> ZipCodes { get; set; } = null!;
+    
         public DbSet<Address> Addresses { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,8 +29,6 @@ namespace CentralAddressSystem.Data
             modelBuilder.Entity<Province>().ToTable("Provinces");
             modelBuilder.Entity<District>().ToTable("Districts");
             modelBuilder.Entity<LocalBody>().ToTable("LocalBodies");
-            modelBuilder.Entity<State>().ToTable("States");
-            modelBuilder.Entity<ZipCode>().ToTable("ZipCodes").HasKey(z => z.ZipID); // Explicitly set ZipID as primary key
             modelBuilder.Entity<Address>().ToTable("Addresses");
             modelBuilder.Entity<User>().ToTable("AspNetUsers");
 

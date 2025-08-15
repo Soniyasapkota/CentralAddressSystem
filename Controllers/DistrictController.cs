@@ -124,7 +124,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: District/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -150,7 +150,7 @@ namespace CentralAddressSystem.Controllers
         // POST: District/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, District district)
+        public async Task<IActionResult> Edit(Guid id, District district)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -188,7 +188,7 @@ namespace CentralAddressSystem.Controllers
         }
 
         // GET: District/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -216,7 +216,7 @@ namespace CentralAddressSystem.Controllers
         // POST: District/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -234,7 +234,7 @@ namespace CentralAddressSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool DistrictExists(int id)
+        private bool DistrictExists(Guid id)
         {
             return _context.Districts.Any(e => e.DistrictID == id);
         }

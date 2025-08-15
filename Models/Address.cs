@@ -7,37 +7,29 @@ namespace CentralAddressSystem.Models
     public class Address
     {
         [Key]
-        public int AddressID { get; set; }
+        public Guid AddressID { get; set; } // Changed to Guid
 
         [Required(ErrorMessage = "User ID is required")]
-        public int UserID { get; set; }
+        public int UserID { get; set; } // Remains int, as User PK is int
         [ForeignKey("UserID")]
-        public User? User { get; set; } // Nullable to avoid validation issues
+        public User? User { get; set; }
 
         [Required(ErrorMessage = "Country is required")]
-        public int CountryID { get; set; }
+        public Guid CountryID { get; set; } // Changed to Guid
         [ForeignKey("CountryID")]
-        public Country? Country { get; set; } // Nullable to avoid validation issues
+        public Country? Country { get; set; }
 
-        public int? ProvinceID { get; set; }
+        public Guid? ProvinceID { get; set; } // Changed to Guid
         [ForeignKey("ProvinceID")]
         public Province? Province { get; set; }
 
-        public int? DistrictID { get; set; }
+        public Guid? DistrictID { get; set; } // Changed to Guid
         [ForeignKey("DistrictID")]
         public District? District { get; set; }
 
-        public Guid? LocalBodyID { get; set; }
+        public Guid? LocalBodyID { get; set; } // Already Guid
         [ForeignKey("LocalBodyID")]
         public LocalBody? LocalBody { get; set; }
-
-        public int? StateID { get; set; }
-        [ForeignKey("StateID")]
-        public State? State { get; set; }
-
-        public int? ZipID { get; set; }
-        [ForeignKey("ZipID")]
-        public ZipCode? ZipCode { get; set; }
 
         [Required(ErrorMessage = "Street is required")]
         [StringLength(200, ErrorMessage = "Street cannot exceed 200 characters")]

@@ -61,20 +61,6 @@
                 </select>
                 <span asp-validation-for="LocalBodyID" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="StateID" class="control-label"></label>
-                <select asp-for="StateID" class="form-control" asp-items="@(ViewData["States"] as SelectList)">
-                    <option value="">Select a State (optional)</option>
-                </select>
-                <span asp-validation-for="StateID" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ZipID" class="control-label"></label>
-                <select asp-for="ZipID" class="form-control" asp-items="@(ViewData["ZipCodes"] as SelectList)">
-                    <option value="">Select a Zip Code (optional)</option>
-                </select>
-                <span asp-validation-for="ZipID" class="text-danger"></span>
-            </div>
             <div class="form-group mt-4">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Back to List</a>

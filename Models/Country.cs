@@ -7,7 +7,7 @@ namespace CentralAddressSystem.Models
     public class Country
     {
         [Key]
-        public int CountryID { get; set; }
+        public Guid CountryID { get; set; }
 
         [Required(ErrorMessage = "Country name is required")]
         [StringLength(100, ErrorMessage = "Country name cannot exceed 100 characters")]
