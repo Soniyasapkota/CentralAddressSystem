@@ -1,4 +1,4 @@
-@model IEnumerable<CentralAddressSystem.Models.District>
+@model IEnumerable<CentralAddressSystem.ViewModels.DistrictViewModel>
 
 @{
     ViewData["Title"] = "Manage Districts";
@@ -39,8 +39,8 @@
                 <tr>
                     <td>@district.DistrictID</td>
                     <td>@district.DistrictName</td>
-                    <td>@district.Province?.ProvinceName</td>
-                    <td>@district.Province?.Country?.CountryName</td>
+                    <td>@district.ProvinceName</td>
+                    <td>@district.CountryName</td>
                     <td>@district.CreatedAt.ToString("dd MMM yyyy")</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@district.DistrictID" class="btn btn-outline-primary btn-sm">Edit</a>

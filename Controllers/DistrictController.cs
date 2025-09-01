@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralAddressSystem.Data;
-using CentralAddressSystem.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
+ using CentralAddressSystem.Models;
+using CentralAddressSystem.ViewModels;
+ using Microsoft.AspNetCore.Authorization;
+  using Microsoft.AspNetCore.Mvc.Rendering;
+   using System.Diagnostics;
 
-namespace CentralAddressSystem.Controllers
-{
+namespace CentralAddressSystem.Controllers {
     [Authorize]
     public class DistrictController : Controller
     {
@@ -30,6 +30,15 @@ namespace CentralAddressSystem.Controllers
             var districts = await _context.Districts
                 .Include(d => d.Province)
                 .ThenInclude(p => p!.Country)
+                .Select(d => new DistrictViewModel
+                {
+                    DistrictID = d.DistrictID,
+                    DistrictName = d.DistrictName,
+                    ProvinceID = d.ProvinceID,
+                    ProvinceName = d.Province!.ProvinceName,
+                    CountryName = d.Province!.Country!.CountryName,
+                    CreatedAt = d.CreatedAt
+                })
                 .ToListAsync();
             return View(districts);
         }
@@ -57,16 +66,19 @@ namespace CentralAddressSystem.Controllers
                 Debug.WriteLine($"Province ID: {province.ProvinceID}, Name: {province.ProvinceName}");
             }
 
-            ViewData["Provinces"] = new SelectList(provinces, "ProvinceID", "ProvinceName", null);
-            return View();
-    
-}
+            var viewModel = new DistrictViewModel
+            {
+                Provinces = new SelectList(provinces, "ProvinceID", "ProvinceName")
+            };
+            return View(viewModel);
+        }
 
+        // POST: District/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(District district)
+        public async Task<IActionResult> Create(DistrictViewModel viewModel)
         {
-            Debug.WriteLine($"POST Create called. DistrictName: {district?.DistrictName}, ProvinceID: {district?.ProvinceID}");
+            Debug.WriteLine($"POST Create called. DistrictName: {viewModel?.DistrictName}, ProvinceID: {viewModel?.ProvinceID}");
 
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -74,12 +86,14 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (district == null)
+            if (viewModel == null)
             {
                 TempData["Error"] = "District data is null.";
                 var provinces = await _context.Provinces.ToListAsync();
-                ViewData["Provinces"] = new SelectList(provinces, "ProvinceID", "ProvinceName");
-                return View();
+                return View(new DistrictViewModel
+                {
+                    Provinces = new SelectList(provinces, "ProvinceID", "ProvinceName")
+                });
             }
 
             // Debug: Log ModelState errors
@@ -95,16 +109,23 @@ namespace CentralAddressSystem.Controllers
                 try
                 {
                     // Verify ProvinceID exists
-                    var provinceExists = await _context.Provinces.AnyAsync(p => p.ProvinceID == district.ProvinceID);
+                    var provinceExists = await _context.Provinces.AnyAsync(p => p.ProvinceID == viewModel.ProvinceID);
                     if (!provinceExists)
                     {
                         TempData["Error"] = "Selected province does not exist.";
                         var provinces = await _context.Provinces.ToListAsync();
-                        ViewData["Provinces"] = new SelectList(provinces, "ProvinceID", "ProvinceName", district.ProvinceID);
-                        return View(district);
+                        viewModel.Provinces = new SelectList(provinces, "ProvinceID", "ProvinceName", viewModel.ProvinceID);
+                        return View(viewModel);
                     }
 
-                    district.CreatedAt = DateTime.Now;
+                    var district = new District
+                    {
+                        DistrictID = Guid.NewGuid(),
+                        DistrictName = viewModel.DistrictName,
+                        ProvinceID = viewModel.ProvinceID,
+                        CreatedAt = DateTime.Now
+                    };
+
                     _context.Add(district);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "District created successfully.";
@@ -119,8 +140,8 @@ namespace CentralAddressSystem.Controllers
             }
 
             var provincesReload = await _context.Provinces.ToListAsync();
-            ViewData["Provinces"] = new SelectList(provincesReload, "ProvinceID", "ProvinceName", district.ProvinceID);
-            return View(district);
+            viewModel.Provinces = new SelectList(provincesReload, "ProvinceID", "ProvinceName", viewModel.ProvinceID);
+            return View(viewModel);
         }
 
         // GET: District/Edit/5
@@ -137,20 +158,31 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            var district = await _context.Districts.FindAsync(id);
+            var district = await _context.Districts
+                .Include(d => d.Province)
+                .FirstOrDefaultAsync(d => d.DistrictID == id);
             if (district == null)
             {
                 return NotFound();
             }
 
-            ViewData["Provinces"] = new SelectList(await _context.Provinces.ToListAsync(), "ProvinceID", "ProvinceName", district.ProvinceID);
-            return View(district);
+            var viewModel = new DistrictViewModel
+            {
+                DistrictID = district.DistrictID,
+                DistrictName = district.DistrictName,
+                ProvinceID = district.ProvinceID,
+                ProvinceName = district.Province?.ProvinceName,
+                CreatedAt = district.CreatedAt,
+                Provinces = new SelectList(await _context.Provinces.ToListAsync(), "ProvinceID", "ProvinceName", district.ProvinceID)
+            };
+
+            return View(viewModel);
         }
 
         // POST: District/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, District district)
+        public async Task<IActionResult> Edit(Guid id, DistrictViewModel viewModel)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -158,7 +190,7 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (id != district.DistrictID)
+            if (id != viewModel.DistrictID)
             {
                 return NotFound();
             }
@@ -167,14 +199,21 @@ namespace CentralAddressSystem.Controllers
             {
                 try
                 {
-                    district.CreatedAt = (await _context.Districts.AsNoTracking().FirstOrDefaultAsync(d => d.DistrictID == id))?.CreatedAt ?? DateTime.Now;
+                    var district = new District
+                    {
+                        DistrictID = viewModel.DistrictID,
+                        DistrictName = viewModel.DistrictName,
+                        ProvinceID = viewModel.ProvinceID,
+                        CreatedAt = (await _context.Districts.AsNoTracking().FirstOrDefaultAsync(d => d.DistrictID == id))?.CreatedAt ?? DateTime.Now
+                    };
+
                     _context.Update(district);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "District updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DistrictExists(district.DistrictID))
+                    if (!DistrictExists(viewModel.DistrictID))
                     {
                         return NotFound();
                     }
@@ -183,8 +222,9 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewData["Provinces"] = new SelectList(await _context.Provinces.ToListAsync(), "ProvinceID", "ProvinceName", district.ProvinceID);
-            return View(district);
+            var provinces = await _context.Provinces.ToListAsync();
+            viewModel.Provinces = new SelectList(provinces, "ProvinceID", "ProvinceName", viewModel.ProvinceID);
+            return View(viewModel);
         }
 
         // GET: District/Delete/5
@@ -210,7 +250,16 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            return View(district);
+            var viewModel = new DistrictViewModel
+            {
+                DistrictID = district.DistrictID,
+                DistrictName = district.DistrictName,
+                ProvinceID = district.ProvinceID,
+                ProvinceName = district.Province?.ProvinceName,
+                CreatedAt = district.CreatedAt
+            };
+
+            return View(viewModel);
         }
 
         // POST: District/Delete/5
@@ -239,4 +288,5 @@ namespace CentralAddressSystem.Controllers
             return _context.Districts.Any(e => e.DistrictID == id);
         }
     }
+
 }

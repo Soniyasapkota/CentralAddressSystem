@@ -1,4 +1,4 @@
-@model CentralAddressSystem.Models.Address
+@model CentralAddressSystem.ViewModels.AddressViewModel
 
 @{
     ViewData["Title"] = "Create Address";
@@ -35,28 +35,28 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="CountryID" class="control-label"></label>
-                <select asp-for="CountryID" class="form-control" asp-items="@(ViewData["Countries"] as SelectList)">
+                <select asp-for="CountryID" class="form-control" asp-items="@Model.Countries">
                     <option value="">Select a Country</option>
                 </select>
                 <span asp-validation-for="CountryID" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="ProvinceID" class="control-label"></label>
-                <select asp-for="ProvinceID" class="form-control" asp-items="@(ViewData["Provinces"] as SelectList)">
+                <select asp-for="ProvinceID" class="form-control" asp-items="@Model.Provinces">
                     <option value="">Select a Province (optional)</option>
                 </select>
                 <span asp-validation-for="ProvinceID" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="DistrictID" class="control-label"></label>
-                <select asp-for="DistrictID" class="form-control" asp-items="@(ViewData["Districts"] as SelectList)">
+                <select asp-for="DistrictID" class="form-control" asp-items="@Model.Districts">
                     <option value="">Select a District (optional)</option>
                 </select>
                 <span asp-validation-for="DistrictID" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="LocalBodyID" class="control-label"></label>
-                <select asp-for="LocalBodyID" class="form-control" asp-items="@(ViewData["LocalBodies"] as SelectList)">
+                <select asp-for="LocalBodyID" class="form-control" asp-items="@Model.LocalBodies">
                     <option value="">Select a Local Body (optional)</option>
                 </select>
                 <span asp-validation-for="LocalBodyID" class="text-danger"></span>

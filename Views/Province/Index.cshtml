@@ -1,4 +1,4 @@
-@model IEnumerable<CentralAddressSystem.Models.Province>
+@model IEnumerable<CentralAddressSystem.ViewModels.ProvinceViewModel>
 
 @{
     ViewData["Title"] = "Manage Provinces";
@@ -14,7 +14,7 @@
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-success">@TempData["Message"]</div>
-    }
+}
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-danger">@TempData["Error"]</div>
@@ -42,7 +42,7 @@
                     <td>@province.ProvinceCode</td>
                     <td>@province.ProvinceName</td>
                     <td>@province.Noofdistricts</td>
-                    <td>@province.Country?.CountryName</td>
+                    <td>@province.CountryName</td>
                     <td>@province.CreatedAt.ToString("dd MMM yyyy")</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@province.ProvinceID" class="btn btn-outline-primary btn-sm">Edit</a>

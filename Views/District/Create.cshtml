@@ -1,4 +1,4 @@
-@model CentralAddressSystem.Models.District
+@model CentralAddressSystem.ViewModels.DistrictViewModel
 
 @{
     ViewData["Title"] = "Create District";
@@ -27,13 +27,15 @@
                 <input asp-for="DistrictName" class="form-control" />
                 <span asp-validation-for="DistrictName" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="ProvinceID" class="control-label"></label>
-                <select asp-for="ProvinceID" class="form-control" asp-items="@(ViewData["Provinces"] as SelectList)">
-                    <option value="">Select a Province</option>
-                </select>
-                <span asp-validation-for="ProvinceID" class="text-danger"></span>
-            </div>
+
+           <div class="form-group mb-3">
+            <label asp-for="ProvinceID" class="control-label"></label>
+         <select asp-for="ProvinceID" class="form-control" asp-items="Model.Provinces">
+          <option value="">Select a Province</option>
+          </select>
+          <span asp-validation-for="ProvinceID" class="text-danger"></span>
+        </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Back to List</a>

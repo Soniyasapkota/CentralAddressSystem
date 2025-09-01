@@ -1,4 +1,4 @@
-@model CentralAddressSystem.Models.Address
+@model CentralAddressSystem.ViewModels.AddressViewModel
 
 @{
     ViewData["Title"] = "Delete Address";
@@ -24,15 +24,15 @@
         <dt class="col-sm-2">Street</dt>
         <dd class="col-sm-10">@Model.Street</dd>
         <dt class="col-sm-2">Country</dt>
-        <dd class="col-sm-10">@Model.Country?.CountryName</dd>
+        <dd class="col-sm-10">@Model.CountryName</dd>
         <dt class="col-sm-2">Province</dt>
-        <dd class="col-sm-10">@Model.Province?.ProvinceName</dd>
+        <dd class="col-sm-10">@Model.ProvinceName</dd>
         <dt class="col-sm-2">District</dt>
-        <dd class="col-sm-10">@Model.District?.DistrictName</dd>
+        <dd class="col-sm-10">@Model.DistrictName</dd>
         <dt class="col-sm-2">Local Body</dt>
-        <dd class="col-sm-10">@Model.LocalBody?.LocalBodyName</dd>
+        <dd class="col-sm-10">@Model.LocalBodyName</dd>
         <dt class="col-sm-2">User</dt>
-        <dd class="col-sm-10">@Model.User?.Email</dd>
+        <dd class="col-sm-10">@Model.UserName</dd>
         <dt class="col-sm-2">Created At</dt>
         <dd class="col-sm-10">@Model.CreatedAt.ToString("dd MMM yyyy")</dd>
     </dl>

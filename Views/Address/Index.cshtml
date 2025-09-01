@@ -1,4 +1,4 @@
-@model IEnumerable<CentralAddressSystem.Models.Address>
+@model IEnumerable<CentralAddressSystem.ViewModels.AddressViewModel>
 
 @{
     ViewData["Title"] = "Manage Addresses";
@@ -40,11 +40,11 @@
             {
                 <tr>
                     <td>@address.Street</td>
-                    <td>@address.Country?.CountryName</td>
-                    <td>@address.Province?.ProvinceName</td>
-                    <td>@address.District?.DistrictName</td>
-                    <td>@address.LocalBody?.LocalBodyName</td>
-                    <td>@address.User?.Email</td>
+                    <td>@address.CountryName</td>
+                    <td>@address.ProvinceName</td>
+                    <td>@address.DistrictName</td>
+                    <td>@address.LocalBodyName</td>
+                    <td>@address.UserName</td>
                     <td>@address.CreatedAt.ToString("dd MMM yyyy")</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@address.AddressID" class="btn btn-outline-primary btn-sm">Edit</a>
@@ -56,7 +56,7 @@
         else
         {
             <tr>
-                <td colspan="10">No addresses found.</td>
+                <td colspan="8">No addresses found.</td>
             </tr>
         }
     </tbody>

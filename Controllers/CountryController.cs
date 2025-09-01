@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+ using Microsoft.EntityFrameworkCore;
 using CentralAddressSystem.Data;
 using CentralAddressSystem.Models;
+ using CentralAddressSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CentralAddressSystem.Controllers
-{
+namespace CentralAddressSystem.Controllers {
     [Authorize]
-    public class CountryController : Controller
+     public class CountryController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -25,7 +25,15 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var countries = await _context.Countries.ToListAsync();
+            var countries = await _context.Countries
+                .Select(c => new CountryViewModel
+                {
+                    CountryID = c.CountryID,
+                    CountryName = c.CountryName,
+                    CountryCode = c.CountryCode,
+                    CreatedAt = c.CreatedAt
+                })
+                .ToListAsync();
             return View(countries);
         }
 
@@ -38,13 +46,13 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View();
+            return View(new CountryViewModel());
         }
 
         // POST: Country/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Country country)
+        public async Task<IActionResult> Create(CountryViewModel viewModel)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -54,14 +62,21 @@ namespace CentralAddressSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                country.CreatedAt = DateTime.Now;
+                var country = new Country
+                {
+                    CountryID = Guid.NewGuid(),
+                    CountryName = viewModel.CountryName,
+                    CountryCode = viewModel.CountryCode,
+                    CreatedAt = DateTime.Now
+                };
+
                 _context.Add(country);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Country created successfully.";
                 return RedirectToAction("Index");
             }
 
-            return View(country);
+            return View(viewModel);
         }
 
         // GET: Country/Edit/5
@@ -84,13 +99,21 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            return View(country);
+            var viewModel = new CountryViewModel
+            {
+                CountryID = country.CountryID,
+                CountryName = country.CountryName,
+                CountryCode = country.CountryCode,
+                CreatedAt = country.CreatedAt
+            };
+
+            return View(viewModel);
         }
 
         // POST: Country/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Country country)
+        public async Task<IActionResult> Edit(Guid id, CountryViewModel viewModel)
         {
             if (HttpContext.Session.GetString("UserRole") != "Admin")
             {
@@ -98,7 +121,7 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (id != country.CountryID)
+            if (id != viewModel.CountryID)
             {
                 return NotFound();
             }
@@ -107,14 +130,21 @@ namespace CentralAddressSystem.Controllers
             {
                 try
                 {
-                    country.CreatedAt = (await _context.Countries.AsNoTracking().FirstOrDefaultAsync(c => c.CountryID == id))?.CreatedAt ?? DateTime.Now;
+                    var country = new Country
+                    {
+                        CountryID = viewModel.CountryID,
+                        CountryName = viewModel.CountryName,
+                        CountryCode = viewModel.CountryCode,
+                        CreatedAt = (await _context.Countries.AsNoTracking().FirstOrDefaultAsync(c => c.CountryID == id))?.CreatedAt ?? DateTime.Now
+                    };
+
                     _context.Update(country);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Country updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CountryExists(country.CountryID))
+                    if (!CountryExists(viewModel.CountryID))
                     {
                         return NotFound();
                     }
@@ -123,7 +153,7 @@ namespace CentralAddressSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(country);
+            return View(viewModel);
         }
 
         // GET: Country/Delete/5
@@ -146,7 +176,15 @@ namespace CentralAddressSystem.Controllers
                 return NotFound();
             }
 
-            return View(country);
+            var viewModel = new CountryViewModel
+            {
+                CountryID = country.CountryID,
+                CountryName = country.CountryName,
+                CountryCode = country.CountryCode,
+                CreatedAt = country.CreatedAt
+            };
+
+            return View(viewModel);
         }
 
         // POST: Country/Delete/5
@@ -175,4 +213,5 @@ namespace CentralAddressSystem.Controllers
             return _context.Countries.Any(e => e.CountryID == id);
         }
     }
+
 }

@@ -1,4 +1,4 @@
-@model CentralAddressSystem.Models.District
+@model CentralAddressSystem.ViewModels.DistrictViewModel
 
 @{
     ViewData["Title"] = "Delete District";
@@ -26,9 +26,9 @@
         <dt class="col-sm-2">District Name</dt>
         <dd class="col-sm-10">@Model.DistrictName</dd>
         <dt class="col-sm-2">Province</dt>
-        <dd class="col-sm-10">@Model.Province?.ProvinceName</dd>
+        <dd class="col-sm-10">@Model.ProvinceName</dd>
         <dt class="col-sm-2">Country</dt>
-        <dd class="col-sm-10">@Model.Province?.Country?.CountryName</dd>
+        <dd class="col-sm-10">@Model.CountryName</dd>
         <dt class="col-sm-2">Created At</dt>
         <dd class="col-sm-10">@Model.CreatedAt.ToString("dd MMM yyyy")</dd>
     </dl>
